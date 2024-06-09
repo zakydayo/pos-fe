@@ -2,6 +2,7 @@
 
 import Layout from "@/components/layout/Layout";
 import UpdateStockModal from "@/components/modal/UpdateStockModal";
+import OrderListTable from "@/components/pages/order/OrderListTable";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -38,7 +39,7 @@ const Home = () => {
           </button>
         </>}
       >
-        Hello
+        <OrderListTable />
       </Layout>
 
       <UpdateStockModal open={modal} onOK={handleOkUpdateStock} onCancel={handleCancelUpdateStock} />

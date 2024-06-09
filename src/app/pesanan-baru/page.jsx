@@ -3,19 +3,20 @@
 import OrderCards from "@/components/card/OrderCards";
 import Layout from "@/components/layout/Layout";
 import OrderSummary from "@/components/pages/order/OrderSummary";
-import { getItemList } from "@/reducers/order";
+import { getItemList, setCart } from "@/reducers/order";
 import { KUE_LIST } from "@/utils/Constants";
 import { map } from "lodash";
 import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 import Scrollbars from "react-custom-scrollbars-2";
 import { BsSearch } from "react-icons/bs";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const PesananBaruPage = () => {
   const router = useRouter();
   const tracksRef = useRef(null);
   const initItemList = useSelector(getItemList);
+  const dispatch = useDispatch();
 
   const [data, setData] = useState(initItemList);
   const [search, setSearch] = useState('');
@@ -43,7 +44,10 @@ const PesananBaruPage = () => {
       extraContent={<>
         <button
           className="text-nowrap w-min h-min transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
-          onClick={() => router.push('/')}
+          onClick={() => {
+            router.push('/');
+            dispatch(setCart([]));
+          }}
         >
           Kembali
         </button>

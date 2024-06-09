@@ -1,23 +1,39 @@
 'use client'
 
 import OrderSummaryItems from "@/components/card/OrderSummaryItems";
-import { getCart, getTotalPrice } from "@/reducers/order";
+import { getCart, getOrderList, getTotalPrice, setCart, setOrderList } from "@/reducers/order";
 import Helper from "@/utils/Helper";
 import { map } from "lodash";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BsFillPrinterFill } from "react-icons/bs";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
-import { Building } from "@/utils/Constants";
 import { printSummary } from "@/utils/SummaryPrint";
+import { useId } from "react";
+import dayjs from "dayjs";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const OrderSummary = () => {
+  const dispatch = useDispatch();
+  const id = useId();
+
   const carts = useSelector(getCart);
   const totalPrice = useSelector(getTotalPrice);
+  const orderList = useSelector(getOrderList);
 
   const handlePrintSummary = () => {
+    let tempOrderList = orderList;
+
+    const addToList = {
+      id: dayjs().format('YYYYMMDDHHMMSSmmm'),
+      date: dayjs().format('DD-MM-YYYY HH:mm:ss'),
+      items: { carts, total: totalPrice }
+    };
+
+    // tempOrderList.push(addToList);
+
+    dispatch(setOrderList([ ...tempOrderList, addToList ]));
     pdfMake.createPdf(printSummary({ carts, totalPrice })).print();
   };
 
